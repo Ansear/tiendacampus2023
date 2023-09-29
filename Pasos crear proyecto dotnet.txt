@@ -1,0 +1,65 @@
+ARQUITECTURA DE LA APLICACION
+
+1- Crear carpeta contenedora del proyecto => mkdir {Nombre}
+2- Version de dotnet => dotnet --version 
+3- Ver plantillas disponibles para creacion de proyetos => dotnet new list
+4- Crear solucion en la carpeta activa actual => dotnet new sln
+5- Crear el proyecto webApi => dotnet new webapi -o API
+6- Asociar el proyecto api con la solución global => dotnet sln add .\API\
+7- Crear biblioteca de clases de Infrastructure => dotnet new classlib -o Infrastructure
+8- Agregar Infrastructure a la solucion => dotnet sln add .\Infrastructure\
+9- Crear biblioteca de clases de Core => dotnet new classlib -o Core
+10- Agregar Core a la solucion => dotnet sln add .\Core\
+11- Ver proyectos asociados a la solucion => dotnet sln list
+12- Relacionar Core a Infrastructure (Primero nos ubicamos en la carpeta Infrastructure) => cd .\Infrastructure\
+											    dotnet add reference ..\Core\
+13- Relacionar Infrastructure a API (Primero nos ubicamos en la carpeta API) => cd ..
+										cd .\API\
+										dotnet add reference ..\Infrastructure\
+
+14- Actualizar herramientas .NET globales => dotnet tool install --global dotnet-ef
+15- Ver las herramientas .NET globales => dotnet tool list --global
+
+PROYECTO BASE
+Crear carpeta Entities dentro de la carpeta Core.
+Crear entidades necesarias
+Crear relacion entre las entidades *Ejemplo* (entidad Pais y Departamento,relacion uno a muchos):
+
+CLASE PAIS
+public class Pais : BaseEntity => Se hereda de la entidad BaseEntity, esta entidad lleva las propiedades que se repitan en todas o casi todas las entidades,en este caso el ID
+    {
+        public string Nombre{ get; set; }
+
+        public ICollection<Departamento> Departamentos { get; set; } => Crear el campo que conecta con la entidad *Departamento* muchos
+
+    }
+
+CLASE DEPARTAMENTO
+public class Departamento : BaseEntity
+    {
+        public string Nombre { get; set; }
+        public int IdpaisFk { get; set; } 
+        public Pais Paises { get; set; } => Crear campo para conectar con la entidad *Pais* uno
+        public ICollection<Ciudad> Ciudades { get; set; } => Crear campo que conecta con la entidad *Ciudades* muchos
+    }
+
+INSTALAR EXTENSION NUGET GALLERY
+Instalar Microsoft.EntityFrameworkCore
+
+
+
+
+
+
+
+--Correr estos comandos cuando se clona un proyecto o se habre un proyecto nuevo
+dotnet build
+dotnet restore
+
+CONTROLADOR
+
+Crear capeta interfaces en core
+en la carpeta interfaces definir una interfaz llamada IGenericRepository
+Crear carpeta Repositories en la carpeta Infrastructure
+
+Generar autoincrementales llaves y usar llaves unica
