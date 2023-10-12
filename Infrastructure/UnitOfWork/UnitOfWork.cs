@@ -13,7 +13,8 @@ namespace Infrastructure.UnitOfWork;
         private ICiudad _ciudades; 
         private IDepartamento _departamentos;
         private IPais _paises;
-        public UnitOfWork(TiendaCampusContext context)
+        private ITipoDocumento _tipoDocumento;
+        public UnitOfWork(TiendaCampusContext context) 
         {
             _context = context;
         }
@@ -22,10 +23,7 @@ namespace Infrastructure.UnitOfWork;
         { 
             get
             {
-                if(_ciudades == null)
-                {
-                _ciudades = new CiudadRepository(_context);
-                }
+                _ciudades ??= new CiudadRepository(_context);
                 return _ciudades;
             }  
         }
@@ -33,10 +31,7 @@ namespace Infrastructure.UnitOfWork;
         { 
             get
             {
-                if(_departamentos == null)
-                {
-                _departamentos = new DepartamentoRepository(_context);
-                }
+                _departamentos ??= new DepartamentoRepository(_context);
                 return _departamentos;
             } 
         }
@@ -44,12 +39,17 @@ namespace Infrastructure.UnitOfWork;
         { 
             get
             {
-                if(_paises == null)
-                {
-                _paises = new PaisRepository(_context);
-                }
+                _paises ??= new PaisRepository(_context);
                 return _paises;
             } 
+        }
+        public ITipoDocumento TipoDocumento
+        {
+            get
+            {
+                _tipoDocumento ??= new TipoDocumentoRepository(_context);
+                return _tipoDocumento;
+            }
         }
 
         public void Dispose()
